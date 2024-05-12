@@ -77,6 +77,7 @@ class AudioPlayer {
   /// Reflects the current platform immediately after it is set.
   AudioPlayerPlatform? _platformValue;
 
+
   /// The interface to the native portion of the plugin. This will be disposed
   /// and set to `null` when not in use.
   Future<AudioPlayerPlatform>? _nativePlatform;
@@ -1174,6 +1175,30 @@ class AudioPlayer {
     if (hasPrevious) {
       await seek(Duration.zero, index: previousIndex);
     }
+  }
+  Future<void> seekToIndex(int index) async {
+    await seek(Duration.zero, index: specifictIndex(index) ?? 0);
+  }
+  int? specifictIndex(int index) => _getRelativeIndexTwo(index);
+
+  int? _getRelativeIndexTwo(int offset) {
+    if (_audioSource == null || currentIndex == null) return null;
+    if (loopMode == LoopMode.one) return currentIndex;
+    final effectiveIndices = this.effectiveIndices;
+    if (effectiveIndices == null || effectiveIndices.isEmpty) return null;
+    final effectiveIndicesInv = _effectiveIndicesInv!;
+    if (currentIndex! >= effectiveIndicesInv.length) return null;
+    final invPos = effectiveIndicesInv[currentIndex!];
+    var newInvPos = offset;
+    if (newInvPos >= effectiveIndices.length || newInvPos < 0) {
+      if (loopMode == LoopMode.all) {
+        newInvPos %= effectiveIndices.length;
+      } else {
+        return null;
+      }
+    }
+    final result = effectiveIndices[newInvPos];
+    return result;
   }
 
   /// Set the Android audio attributes for this player. Has no effect on other
