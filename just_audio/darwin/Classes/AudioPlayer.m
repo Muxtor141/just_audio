@@ -888,7 +888,18 @@
     } else if ([keyPath isEqualToString:@"currentItem"] && _player.currentItem) {
         IndexedPlayerItem *playerItem = (IndexedPlayerItem *)change[NSKeyValueChangeNewKey];
         //IndexedPlayerItem *oldPlayerItem = (IndexedPlayerItem *)change[NSKeyValueChangeOldKey];
+        if (playerItem.status == AVPlayerItemStatusFailed) {
+            if ([_orderInv[_index] intValue] + 1 < [_order count]) {
+                // account for automatic move to next item
 
+                //NSLog(@"advance to next on error: index = %d", _index);
+                [self updateEndAction];
+                [self broadcastPlaybackEvent];
+            } else {
+                //NSLog(@"error on last item");
+            }
+            return;
+        }
         //NSLog(@"currentItem changed. _index=%d", _index);
         _bufferUnconfirmed = YES;
         // If we've skipped or transitioned to a new item and we're not
