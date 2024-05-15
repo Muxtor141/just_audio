@@ -888,15 +888,7 @@
     } else if ([keyPath isEqualToString:@"currentItem"] && _player.currentItem) {
         IndexedPlayerItem *playerItem = (IndexedPlayerItem *)change[NSKeyValueChangeNewKey];
         //IndexedPlayerItem *oldPlayerItem = (IndexedPlayerItem *)change[NSKeyValueChangeOldKey];
-          int expectedIndex = [self indexForItem:playerItem];
-                  if (_index != expectedIndex) {
-                      // AVQueuePlayer will sometimes skip over error items without
-                      // notifying this observer.
-                      //NSLog(@"Queue change detected. Adjusting index from %d -> %d", _index, expectedIndex);
-                      _index = expectedIndex;
-                      [self updateEndAction];
-                      [self broadcastPlaybackEvent];
-                  }
+
         //NSLog(@"currentItem changed. _index=%d", _index);
         _bufferUnconfirmed = YES;
         // If we've skipped or transitioned to a new item and we're not
