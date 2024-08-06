@@ -43,6 +43,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
+import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
 import io.flutter.Log;
@@ -364,6 +365,7 @@ public class AudioPlayer implements MethodCallHandler, Player.Listener, Metadata
 
     @Override
     public void onPlayerError(PlaybackException error) {
+        Log.d("nativeAudioError1","Player should stop");
         if (error instanceof ExoPlaybackException) {
             final ExoPlaybackException exoError = (ExoPlaybackException)error;
             switch (exoError.type) {
@@ -389,7 +391,21 @@ public class AudioPlayer implements MethodCallHandler, Player.Listener, Metadata
             sendError(String.valueOf(error.errorCode), error.getMessage(), mapOf("index", currentIndex));
         }
         errorCount++;
+        Log.d("nativeAudioError2","Player should stop");
+        this.initialPos=player.getCurrentPosition();
+        updatePosition();
+        processingState = ProcessingState.loading;
+        enqueuePlaybackEvent();
+        player.setMediaSource(mediaSource);
+        processingState = ProcessingState.loading;
+        player.prepare();
         player.stop();
+
+        Log.d("nativeAudioError3","Player should stop25");
+
+
+
+
         //Skipping to next tracks when error occured removed
 //        if (player.hasNextMediaItem() && currentIndex != null && errorCount <= 5) {
 //            int nextIndex = currentIndex + 1;
