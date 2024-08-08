@@ -410,6 +410,9 @@ class _PlayerAudioHandler extends BaseAudioHandler
     playbackEventMessageStream.listen((event) {
       _justAudioEvent = event;
       _broadcastState();
+    },onError: (errors){
+      _playing=false;
+      print('errors3');
     });
     playbackEventMessageStream
         .map((event) => event.icyMetadata)
