@@ -101,6 +101,9 @@ class AudioPlayer {
   final String _id;
   final _proxy = _ProxyHttpServer();
   AudioSource? _audioSource;
+
+  _ProxyHttpServer get proxy=>_proxy;
+
   final Map<String, AudioSource> _audioSources = {};
   bool _disposed = false;
   _InitialSeekValues? _initialSeekValues;
