@@ -392,6 +392,11 @@ public class AudioPlayer implements MethodCallHandler, Player.Listener, Metadata
             sendError(String.valueOf(error.errorCode), error.getMessage(), mapOf("index", currentIndex));
         }
         errorCount++;
+        processingState = ProcessingState.loading;
+        enqueuePlaybackEvent();
+//        player.setMediaSource(mediaSource);
+        player.prepare();
+        player.stop();
         //Skipping to next tracks when error occured removed
 //        if (player.hasNextMediaItem() && currentIndex != null && errorCount <= 5) {
 //            int nextIndex = currentIndex + 1;
