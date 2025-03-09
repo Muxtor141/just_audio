@@ -1,6 +1,6 @@
 group 'com.ryanheise.just_audio'
 version '1.0'
-def args = ["-Xlint:deprecation","-Xlint:unchecked","-Werror"]
+def args = ["-Xlint:deprecation","-Xlint:unchecked"]
 
 buildscript {
     repositories {
@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath 'com.android.tools.build:gradle:8.5.0'
     }
 }
 
@@ -31,27 +31,27 @@ android {
     if (project.android.hasProperty("namespace")) {
         namespace 'com.ryanheise.just_audio'
     }
-    compileSdkVersion 33
+    compileSdk 34
 
     defaultConfig {
-        minSdkVersion 16
+        minSdk 16
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     lintOptions {
-        disable 'InvalidPackage'
+        disable 'AndroidGradlePluginVersion', 'InvalidPackage', 'GradleDependency', 'NewerVersionAvailable'
     }
 
     compileOptions {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
-}
 
-dependencies {
-    def exoplayer_version = "2.18.7"
-    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
-    implementation "com.google.android.exoplayer:exoplayer-dash:$exoplayer_version"
-    implementation "com.google.android.exoplayer:exoplayer-hls:$exoplayer_version"
-    implementation "com.google.android.exoplayer:exoplayer-smoothstreaming:$exoplayer_version"
+    dependencies {
+        def exoplayer_version = "1.4.1"
+        implementation "androidx.media3:media3-exoplayer:$exoplayer_version"
+        implementation "androidx.media3:media3-exoplayer-dash:$exoplayer_version"
+        implementation "androidx.media3:media3-exoplayer-hls:$exoplayer_version"
+        implementation "androidx.media3:media3-exoplayer-smoothstreaming:$exoplayer_version"
+    }
 }
