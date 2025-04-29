@@ -2124,7 +2124,24 @@ class _ProxyHttpServer {
     }, onError: (Object e, StackTrace st) {
       _running = false;
     });
-  }
+    Future<bool> isProxyServerHealthy() async {
+      try {
+        final uri = Uri.http('${_server!.address.address}:${_server!.port}', '/health');
+        final httpClient = HttpClient();
+        final request = await httpClient.getUrl(uri);
+        final response = await request.close();
+
+        final isHealthy = response.statusCode == 200;
+        print(isHealthy);
+        httpClient.close(force: true);
+        print('closedhealth');
+        return isHealthy;
+      } catch (_) {
+        return false;
+      }
+    }
+
+
 
   /// Stops the server
   Future<dynamic> stop() async {
