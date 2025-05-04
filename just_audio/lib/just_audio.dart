@@ -2123,7 +2123,7 @@ class _ProxyHttpServer {
       _running = false;
     }, onError: (Object e, StackTrace st) {
       _running = false;
-    });
+    });}
     Future<bool> isProxyServerHealthy() async {
       try {
         final uri = Uri.http('${_server!.address.address}:${_server!.port}', '/health');
