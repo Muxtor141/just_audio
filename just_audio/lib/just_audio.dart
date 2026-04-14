@@ -2124,22 +2124,24 @@ class _ProxyHttpServer {
     }, onError: (Object e, StackTrace st) {
       _running = false;
     });}
-    Future<bool> isProxyServerHealthy() async {
-      try {
-        final uri = Uri.http('${_server!.address.address}:${_server!.port}', '/health');
-        final httpClient = HttpClient();
-        final request = await httpClient.getUrl(uri);
-        final response = await request.close();
-
-        final isHealthy = response.statusCode == 200;
-        print(isHealthy);
-        httpClient.close(force: true);
-        print('closedhealth');
-        return isHealthy;
-      } catch (_) {
-        return false;
-      }
+  Future<bool> isProxyServerHealthy() async {
+    ///New HealthCheckin method
+    if (!_running) return false;
+    try {
+      final socket = await Socket.connect(
+        InternetAddress.loopbackIPv4,
+        _server.port,
+        timeout: const Duration(seconds: 1),
+      );
+      print('socketCheckSuccess');
+      socket.destroy();
+      print('socketCheckSuccess2');
+      return true;
+    } catch (_) {
+      print('socketCheckFail');
+      return false;
     }
+  }
 
 
 
